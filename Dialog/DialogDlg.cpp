@@ -535,6 +535,8 @@ void CDialogDlg::OnBnClickedBrowse()
 	UpdateData(FALSE);
 }
 
+
+
 //用来改变三维地图的视角
 extern float tranlaX;
 extern float tranlaY;

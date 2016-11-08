@@ -334,6 +334,7 @@ bool Star::Creatgraph()
 	//---------------规划路线-----------------------------
 
 	int pos[3];
+	FILE*fp_endpoint;
 	
 	for (int i = 0; i < 3; i++)
 		startRealPosition[i] = minValue[i] + 2;
@@ -434,6 +435,11 @@ bool Star::Creatgraph()
 		endp = nodes[mediup[2]][mediup[1]][mediup[0]];//重新设置开始、结束结点
 		old_end = endp;
 		Find_path(&startp);
+		
+		//将终点坐标保存在endpoint.txt里，用于三维坐标标注
+		if ((fp_endpoint = fopen("F:\\endpoint.txt", "a")) != 0)
+			fprintf(fp, "%8.2f%8.2f%8.2f\n", mediump[0], mediump[1], mediump[2]);
+		fclose(fp);
 	}
 	else
 	{

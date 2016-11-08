@@ -124,14 +124,14 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 		{
 		}
 
-		if (!fs1_depth.isOpened()) //没depth
+		/*if (!fs1_depth.isOpened()) //没depth
 		{
 			fs1_left.release(); //不要忘记关闭，否则会出错误
 			fs1_depth.release(); //不要忘记关闭，否则会出错误
 			no++;
 			continue;
 		}
-		else if (fs1_depth.isOpened() && fs1_left.isOpened())//left和depth存在且格式都正确
+		else*/ if (fs1_depth.isOpened() && fs1_left.isOpened())//left和depth存在且格式都正确
 		{
 			count_opened++;
 			no++;
