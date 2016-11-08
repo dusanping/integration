@@ -52,7 +52,7 @@
     <IncludePath>..\octomap\include;..\opencv\include;..\opengl\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\octomap\lib;..\opencv\lib;..\SkinSharp;..\opengl\lib;$(LibraryPath)</LibraryPath>
     <TargetName>Dialog</TargetName>
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

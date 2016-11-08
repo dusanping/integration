@@ -8,7 +8,7 @@
 #include "GetImageThread.h"
 #include "GetVoxelThread.h"
 #include "PathPlanThread.h"
-#include "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\atlmfc\include\afxwin.h"
+//#include "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\atlmfc\include\afxwin.h"
 #include "dialog_opengl.h"
 #include "Resource.h"
 
