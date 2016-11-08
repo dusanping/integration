@@ -1,4 +1,4 @@
-// GetImageThread.cpp : ÊµÏÖÎÄ¼ş
+// GetImageThread.cpp : å®ç°æ–‡ä»¶
 //
 #include "stdafx.h"
 #include <string>
@@ -26,13 +26,13 @@ GetImageThread::~GetImageThread()
 
 BOOL GetImageThread::InitInstance()
 {
-	// TODO:    ÔÚ´ËÖ´ĞĞÈÎÒâÖğÏß³Ì³õÊ¼»¯
+	// TODO:    åœ¨æ­¤æ‰§è¡Œä»»æ„é€çº¿ç¨‹åˆå§‹åŒ–
 	return TRUE;
 }
 
 int GetImageThread::ExitInstance()
 {
-	// TODO:    ÔÚ´ËÖ´ĞĞÈÎÒâÖğÏß³ÌÇåÀí
+	// TODO:    åœ¨æ­¤æ‰§è¡Œä»»æ„é€çº¿ç¨‹æ¸…ç†
 	return CWinThread::ExitInstance();
 }
 
@@ -41,7 +41,7 @@ BEGIN_MESSAGE_MAP(GetImageThread, CWinThread)
 END_MESSAGE_MAP()
 
 
-// GetImageThread ÏûÏ¢´¦Àí³ÌĞò
+// GetImageThread æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 using namespace cv;
 using namespace std;
@@ -53,13 +53,13 @@ extern vector<Mat> vec_left;
 extern vector<Position> vec_position;
 
 
-extern volatile ProgressStatus progress_status;//±êÖ¾½ø³ÌµÄÔËĞĞ×´Ì¬£¬0ÊÇÔİÍ££¬1ÊÇ½øĞĞ
+extern volatile ProgressStatus progress_status;//æ ‡å¿—è¿›ç¨‹çš„è¿è¡ŒçŠ¶æ€ï¼Œ0æ˜¯æš‚åœï¼Œ1æ˜¯è¿›è¡Œ
 
 extern int file_count;
-extern int count_opened; //ÓÃÀ´¼ÆÊıÒÑ¾­´ò¿ªµÄÎÄ¼şÊıÁ¿
+extern int count_opened; //ç”¨æ¥è®¡æ•°å·²ç»æ‰“å¼€çš„æ–‡ä»¶æ•°é‡
 extern int no;
 
-volatile get_image_ret_code get_image_status = get_image_is_running; //±êÖ¾ÕâÒ»GetImageº¯ÊıÊÇ·ñÒÑ¾­½áÊø
+volatile get_image_ret_code get_image_status = get_image_is_running; //æ ‡å¿—è¿™ä¸€GetImageå‡½æ•°æ˜¯å¦å·²ç»ç»“æŸ
 
 string itos(double i)
 {
@@ -70,7 +70,7 @@ string itos(double i)
 	return ss.str();
 }
 
-//string×ª»¯³ÉLPCWSTRÀàĞÍ
+//stringè½¬åŒ–æˆLPCWSTRç±»å‹
 LPCWSTR stringToLPCWSTR(std::string orig)
 {
 	size_t origsize = orig.length() + 1;
@@ -83,9 +83,9 @@ LPCWSTR stringToLPCWSTR(std::string orig)
 
 void GetImageThread::GetImage(UINT wParam, LONG lParam)
 {
-	get_image_status = get_image_is_running;//Ã¿´Îµ÷ÓÃ´Ëº¯ÊıÏÈµÃÖÃ±êÖ¾Î»
+	get_image_status = get_image_is_running;//æ¯æ¬¡è°ƒç”¨æ­¤å‡½æ•°å…ˆå¾—ç½®æ ‡å¿—ä½
 
-	if (!file_count) //Ã»ÓĞÎÄ¼ş
+	if (!file_count) //æ²¡æœ‰æ–‡ä»¶
 	{
 		get_image_status = no_file;
 		::PostMessage((HWND)(GetMainWnd()->GetSafeHwnd()), WM_UPDATE_STATUS, get_image_status, NULL);
@@ -95,25 +95,25 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 	FileStorage fs1_depth;
 	FileStorage fs1_left;
 
-	//³ÌĞòÁÙÊ±±äÁ¿
+	//ç¨‹åºä¸´æ—¶å˜é‡
 	cv::Mat depth_image;
 	cv::Mat left_image;
 	Position position;
 
 	while(count_opened<file_count)
 	{
-		if (progress_status==is_stopped) //Ñ­»·¼ì²â±êÖ¾Î»progress_status£¬ÕâÒ»²½±ØĞëÒªÓĞ£¬postquitmessage()ÎŞ·¨Á¢¼´½áÊøÍâ²ãforÑ­»·
+		if (progress_status==is_stopped) //å¾ªç¯æ£€æµ‹æ ‡å¿—ä½progress_statusï¼Œè¿™ä¸€æ­¥å¿…é¡»è¦æœ‰ï¼Œpostquitmessage()æ— æ³•ç«‹å³ç»“æŸå¤–å±‚forå¾ªç¯
 		{
 			get_image_status = get_image_is_stopped;
 			::PostMessage((HWND)(GetMainWnd()->GetSafeHwnd()), WM_UPDATE_STATUS, get_image_status, NULL);
 			return;
 		}
-		//ÏÈÅĞ¶ÏÎÄ¼şµÄ¸ñÊ½ÊÇ·ñÕıÈ·
+		//å…ˆåˆ¤æ–­æ–‡ä»¶çš„æ ¼å¼æ˜¯å¦æ­£ç¡®
 		try
 		{	fs1_depth.open(string(path) + "depth" + itos(no) + ".xml", FileStorage::READ);	}
-		catch (std::exception const& e) //µ±ÎÄ¼ş´æÔÚÇÒ¸ñÊ½²»ÕıÈ·µÄÊ±ºò²Å»á·¢ÉúÒì³££¬´ËÊ±fs1_depth.isOpened == false
+		catch (std::exception const& e) //å½“æ–‡ä»¶å­˜åœ¨ä¸”æ ¼å¼ä¸æ­£ç¡®çš„æ—¶å€™æ‰ä¼šå‘ç”Ÿå¼‚å¸¸ï¼Œæ­¤æ—¶fs1_depth.isOpened == false
 		{
-			count_opened++; //ÕâÀï²»ÒªÒÅÍücount_opended++
+			count_opened++; //è¿™é‡Œä¸è¦é—å¿˜count_opended++
 			no++;
 			continue;
 		}
@@ -124,14 +124,14 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 		{
 		}
 
-		/*if (!fs1_depth.isOpened()) //Ã»depth
+		if (!fs1_depth.isOpened()) //æ²¡depth
 		{
-			fs1_left.release(); //²»ÒªÍü¼Ç¹Ø±Õ£¬·ñÔò»á³ö´íÎó
-			fs1_depth.release(); //²»ÒªÍü¼Ç¹Ø±Õ£¬·ñÔò»á³ö´íÎó
+			fs1_left.release(); //ä¸è¦å¿˜è®°å…³é—­ï¼Œå¦åˆ™ä¼šå‡ºé”™è¯¯
+			fs1_depth.release(); //ä¸è¦å¿˜è®°å…³é—­ï¼Œå¦åˆ™ä¼šå‡ºé”™è¯¯
 			no++;
 			continue;
 		}
-		else*/ if (fs1_depth.isOpened() && fs1_left.isOpened())//leftºÍdepth´æÔÚÇÒ¸ñÊ½¶¼ÕıÈ·
+		else if (fs1_depth.isOpened() && fs1_left.isOpened())//leftå’Œdepthå­˜åœ¨ä¸”æ ¼å¼éƒ½æ­£ç¡®
 		{
 			count_opened++;
 			no++;
@@ -140,7 +140,7 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 			fs1_depth["gps"]["gps_x"] >> position.x; fs1_depth["gps"]["gps_y"] >> position.y; fs1_depth["gps"]["gps_z"] >> position.z;
 			fs1_depth["attitude"]["yaw"] >> position.yaw; fs1_depth["attitude"]["roll"] >> position.roll; fs1_depth["attitude"]["pitch"] >> position.pitch;
 		}
-		else//ÓĞdepthÃ»left
+		else//æœ‰depthæ²¡left
 		{
 			count_opened++;
 			no++;
@@ -149,7 +149,7 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 			fs1_depth["gps"]["gps_x"] >> position.x; fs1_depth["gps"]["gps_y"] >> position.y; fs1_depth["gps"]["gps_z"] >> position.z;
 			fs1_depth["attitude"]["yaw"] >> position.yaw; fs1_depth["attitude"]["roll"] >> position.roll; fs1_depth["attitude"]["pitch"] >> position.pitch;
 		}
-		//½«¶ÁÈ¡µÄÊı¾İ´æµ½ÈİÆ÷ÖĞ
+		//å°†è¯»å–çš„æ•°æ®å­˜åˆ°å®¹å™¨ä¸­
 		critical_rawdata.Lock();
 		vec_depth.push_back(depth_image.clone());
 		vec_left.push_back(left_image.clone());
@@ -162,5 +162,5 @@ void GetImageThread::GetImage(UINT wParam, LONG lParam)
 
 	get_image_status = get_image_complete;
 	::PostMessage((HWND)(GetMainWnd()->GetSafeHwnd()), WM_UPDATE_STATUS, get_image_status, NULL);
-	return;//´ú±í·µ»ØÕı³£Öµ
+	return;//ä»£è¡¨è¿”å›æ­£å¸¸å€¼
 }
